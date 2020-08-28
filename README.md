@@ -1,16 +1,25 @@
-# <img src="src/docs/asciidoc/images/spring-framework.png" width="80" height="80"> Spring Framework [![Build Status](https://build.spring.io/plugins/servlet/wittified/build-status/SPR-PUBM)](https://build.spring.io/browse/SPR)
+# <img src="src/docs/asciidoc/images/spring-framework.png" width="80" height="80"> Spring Framework 
 
-This is the home of the Spring Framework: the foundation for all [Spring projects](https://spring.io/projects). Collectively the Spring Framework and the family of Spring projects are often referred to simply as "Spring". 
 
-Spring provides everything required beyond the Java programming language for creating enterprise applications for a wide range of scenarios and architectures. Please read the [Overview](https://docs.spring.io/spring/docs/current/spring-framework-reference/overview.html#spring-introduction) section as reference for a more complete introduction.
+## Spring Source Build -- 本项目 build 指引:
+前置安装：
+1. jdk 1.8+
+2. gradle
+3. IDEA 
 
-## Code of Conduct
+## Steps -- 步骤：
 
-This project is governed by the [Spring Code of Conduct](CODE_OF_CONDUCT.adoc). By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+1. Clone下来之后需要预先编译：
+```shell script
+./gradlew :spring-oxm:compileTestJava
+```
+该步骤会启动 Gradle 编译，spring-framework-5.2.8 默认用的是 gradle-5.6.4, 如果你的电脑没有会自动下载，由于 Gradle 下载较慢，你可以实现下载好压缩包，当启动上述命令之后，停止该命令，会在 .gradle/wrapper/dists/gradle-5.6.4-bin/下新建一个哈希命令的文件夹，将你的 gradle 压缩包放入里面再执行上述命令即可。
+2. 导入到 IDEA 会自动启动 gradle build(如果没有请手动执行)
 
-## Access to Binaries
+3. 右键 spring-aspects 模块将其 `unload`(因为用了字节码生成类,在 IDEA 里面会有很多报错)
 
-For access to artifacts or a distribution zip, see the [Spring Framework Artifacts](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Artifacts) wiki page.
+详细 [参见文件 import-into-idea](./import-into-idea.md)
+
 
 ## Documentation
 
@@ -20,11 +29,3 @@ The Spring Framework maintains reference documentation ([published](https://docs
 ## Build from Source
 
 See the [Build from Source](https://github.com/spring-projects/spring-framework/wiki/Build-from-Source) Wiki page and the [CONTRIBUTING.md](CONTRIBUTING.md) file.
-
-## Stay in Touch
-
-Follow [@SpringCentral](https://twitter.com/springcentral), [@SpringFramework](https://twitter.com/springframework), and its [team members](https://twitter.com/springframework/lists/team/members) on Twitter. In-depth articles can be found at [The Spring Blog](https://spring.io/blog/), and releases are announced via our [news feed](https://spring.io/blog/category/news).
-
-## License
-
-The Spring Framework is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
