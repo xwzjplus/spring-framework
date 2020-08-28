@@ -10,16 +10,18 @@
 ## Steps -- 步骤：
 
 1. Clone下来之后需要预先编译：
-```shell script
-./gradlew :spring-oxm:compileTestJava
-```
-该步骤会启动 Gradle 编译，spring-framework-5.2.8 默认用的是 gradle-5.6.4, 如果你的电脑没有会自动下载，由于 Gradle 下载较慢，你可以实现下载好压缩包，当启动上述命令之后，停止该命令，会在 .gradle/wrapper/dists/gradle-5.6.4-bin/下新建一个哈希命令的文件夹，将你的 gradle 压缩包放入里面再执行上述命令即可。
+  ```shell script
+  ./gradlew :spring-oxm:compileTestJava
+  ```
+  该步骤会启动 Gradle 编译，spring-framework-5.2.8 默认用的是 gradle-5.6.4, 如果你的电脑没有会自动下载，由于 Gradle 下载较慢，你可以实现下载好压缩包，当启动上述命令之后，停止该命令，会在 .gradle/wrapper/dists/gradle-5.6.4-bin/下新建一个哈希命令的文件夹，将你的 gradle 压缩包放入里面再执行上述命令即可。
+
 
 2. 导入到 IDEA 会自动启动 gradle build(如果没有请手动执行)
 
 3. 右键 spring-aspects 模块将其 `unload`(因为用了字节码生成类,在 IDEA 里面会有很多报错)
 
-详细 [参见文件 import-into-idea](./import-into-idea.md)
+
+>> 详细 [参见文件 import-into-idea](./import-into-idea.md)
 
 
 ## Documentation
