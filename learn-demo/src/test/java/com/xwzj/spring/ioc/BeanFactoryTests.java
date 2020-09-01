@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.xwzj.spring.model.Person;
+import com.xwzj.spring.po.Student;
+import com.xwzj.spring.po.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -54,5 +56,13 @@ public class BeanFactoryTests {
 
 		DynamicService dynamicService2 = context.getBean("dynamicService2", DynamicService.class);
 		assertNotNull(dynamicService2);
+	}
+
+	@Test
+	void testCycleBeanByField() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("com.xwzj.spring.po");
+		Student student = context.getBean("student", Student.class);
+		Teacher teacher = context.getBean("teacher", Teacher.class);
+		assertEquals(teacher, student.getTeacher());
 	}
 }

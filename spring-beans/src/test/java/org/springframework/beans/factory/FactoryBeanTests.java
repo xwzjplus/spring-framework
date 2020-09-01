@@ -16,12 +16,14 @@
 
 package org.springframework.beans.factory;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.core.testfixture.io.ResourceTestUtils.qualifiedResource;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -29,9 +31,6 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.testfixture.stereotype.Component;
 import org.springframework.util.Assert;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.core.testfixture.io.ResourceTestUtils.qualifiedResource;
 
 /**
  * @author Rob Harrop
@@ -45,6 +44,7 @@ public class FactoryBeanTests {
 	private static final Resource WITH_AUTOWIRING_CONTEXT = qualifiedResource(CLASS, "withAutowiring.xml");
 	private static final Resource ABSTRACT_CONTEXT = qualifiedResource(CLASS, "abstract.xml");
 	private static final Resource CIRCULAR_CONTEXT = qualifiedResource(CLASS, "circular.xml");
+	private static final Resource CIRCULAR_CONSTRUCT_CONTEXT = qualifiedResource(CLASS, "circularConstruct.xml");
 
 
 	@Test
@@ -120,6 +120,19 @@ public class FactoryBeanTests {
 		assertThat(impl1.getImpl2().getImpl1()).isSameAs(impl1);
 		assertThat(counter.getCount("bean1")).isEqualTo(1);
 		assertThat(counter.getCount("bean2")).isEqualTo(1);
+	}
+
+	/**
+	 * 测试循环依赖 by constructor
+	 */
+	@Test
+	public void testCircularReferenceByConstructor() {
+		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+		reader.loadBeanDefinitions(CIRCULAR_CONSTRUCT_CONTEXT);
+
+		assertThatThrownBy(() -> factory.getBean(TestBean1.class))
+				.hasCauseInstanceOf(BeanCreationException.class);
 	}
 
 
@@ -329,6 +342,31 @@ public class FactoryBeanTests {
 
 		public void setImpl1(BeanImpl1 impl1) {
 			this.impl1 = impl1;
+		}
+	}
+
+
+	public static class TestBean1 {
+		private final TestBean2 bean2Impl;
+
+		public TestBean1(TestBean2 bean2Impl) {
+			this.bean2Impl = bean2Impl;
+		}
+
+		public TestBean2 getBean2Impl() {
+			return bean2Impl;
+		}
+	}
+
+	public static class TestBean2 {
+		private final TestBean1 bean1Impl;
+
+		public TestBean2(TestBean1 bean1Impl) {
+			this.bean1Impl = bean1Impl;
+		}
+
+		public TestBean1 getBean1Impl() {
+			return bean1Impl;
 		}
 	}
 
